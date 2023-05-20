@@ -1,0 +1,27 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "jonmagon@gmail.com",
+                "Name": "Dmitry Sidorov"
+            }
+        ],
+        "Category": "Hardware",
+        "Description": "The simplest KDE brightness applet (X11, XRandR)",
+        "Icon": "brightness-high",
+        "Id": "com.github.jonmagon.plasma-screendimmer",
+        "License": "GPL-3.0+",
+        "Name": "Display Brightness",
+        "Name[de]": "Monitor-Helligkeit",
+        "Name[ru]": "Яркость экрана",
+        "ServiceTypes": [
+            "Plasma/Applet"
+        ],
+        "Version": "0.9",
+        "Website": "https://github.com/JonMagon/plasma-screendimmer"
+    },
+    "X-Plasma-API": "declarativeappletscript",
+    "X-Plasma-MainScript": "ui/main.qml",
+    "X-Plasma-NotificationArea": true,
+    "X-Plasma-NotificationAreaCategory": "Hardware"
+}
