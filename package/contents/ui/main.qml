@@ -1,22 +1,22 @@
 /*
-    SPDX-FileCopyrightText: 2023 Dmitry Ilyich Sidorov <jonmagon@gmail.com>
+    SPDX-FileCopyrightText: 2023, 2024 Dmitry Ilyich Sidorov <jonmagon@gmail.com>
 
     SPDX-License-Identifier: LGPL-3.0-or-later
 */
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.0
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import org.kde.plasma.core as PlasmaCore
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.extras as PlasmaExtras
+import org.kde.plasma.plasmoid
+import org.kde.plasma.plasma5support as Plasma5Support
 
-import org.kde.plasma.core 2.1 as PlasmaCore
-import org.kde.plasma.components 3.0 as PC3
-import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.plasma.plasmoid 2.0
-import QtQuick.Dialogs 1.2
-
-Item {
+PlasmoidItem {
     id: main
 
-    property string displayName: i18n("plasma_applet_org.kde.plasma.battery", "Brightness")
+    property string displayName: i18n("plasma_applet_org.kde.plasma.brightness", "Brightness")
 
     property int minimumScreenBrightness: plasmoid.configuration.minimumBrightness
     property int maximumScreenBrightness: 100
@@ -27,17 +27,16 @@ Item {
         id: errorDialog
         title: "An error occuried"
         text: "Failed to get the current brightness and output values with xrandr."
-        icon: StandardIcon.Critical
     }
 
-    Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
+    preferredRepresentation: compactRepresentation
 
-    Plasmoid.fullRepresentation: PlasmaExtras.Representation {
+    fullRepresentation: PlasmaExtras.Representation {
         id: dialogItem
 
-        Layout.minimumWidth: PlasmaCore.Units.gridUnit * 10
-        Layout.maximumWidth: PlasmaCore.Units.gridUnit * 80
-        Layout.preferredWidth: PlasmaCore.Units.gridUnit * 20
+        Layout.minimumWidth: Kirigami.Units.gridUnit * 10
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 80
+        Layout.preferredWidth: Kirigami.Units.gridUnit * 20
 
         Layout.preferredHeight: implicitHeight
 
@@ -45,7 +44,7 @@ Item {
             id: brightnessSlider
 
             icon.name: "video-display-brightness"
-            text: i18nd("plasma_applet_org.kde.plasma.battery", "Display Brightness")
+            text: i18nd("plasma_applet_org.kde.plasma.brightness", "Display Brightness")
             value: screenBrightness
             maximumValue: maximumScreenBrightness
 
@@ -61,20 +60,20 @@ Item {
                 }
 
                 executable.exec(`xrandr --output ${screenOutput} --brightness ${screenBrightness / 100}`)
+                console.log(`xrandr --output ${screenOutput} --brightness ${screenBrightness / 100}`)
             }
-
         }
     }
 
-    Plasmoid.compactRepresentation: PlasmaCore.IconItem {
+    compactRepresentation: Kirigami.Icon {
         source: Plasmoid.icon
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton
-            onClicked: {
+            onClicked: function (mouse) {
                 if (mouse.button === Qt.LeftButton) {
-                    if (plasmoid.expanded) {
-                        plasmoid.expanded = false
+                    if (main.expanded) {
+                        main.expanded = false
                     } else {
                         executable.exec("xrandr --verbose | grep -m 2 -i \" connected\\|brightness\"")
                     }
@@ -85,7 +84,7 @@ Item {
 
     Connections {
         target: executable
-        onExited: {
+        onExited: function(exitCode, exitStatus, stdout, stderr) {
             if (exitCode == 0 && exitStatus == 0) {
                 if (stdout != null && stdout.length > 5) {
                     var lines = stdout.trim().split('\n')
@@ -99,8 +98,8 @@ Item {
                         }
                     }
 
-                    if (!plasmoid.expanded) {
-                        plasmoid.expanded = true
+                    if (!main.expanded) {
+                        main.expanded = true
                     }
                 }
             }
@@ -110,11 +109,11 @@ Item {
         }
     }
 
-    PlasmaCore.DataSource {
+    Plasma5Support.DataSource {
         id: executable
         engine: "executable"
         connectedSources: []
-        onNewData: {
+        onNewData: function(sourceName, data) {
             var exitCode = data["exit code"]
             var exitStatus = data["exit status"]
             var stdout = data["stdout"]

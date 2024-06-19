@@ -14,14 +14,11 @@
         "Name": "Display Brightness",
         "Name[de]": "Monitor-Helligkeit",
         "Name[ru]": "Яркость экрана",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
-        "Version": "0.9",
+        "Version": "1.0",
         "Website": "https://github.com/JonMagon/plasma-screendimmer"
     },
-    "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml",
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "KPackageStructure": "Plasma/Applet",
     "X-Plasma-NotificationArea": true,
     "X-Plasma-NotificationAreaCategory": "Hardware"
 }

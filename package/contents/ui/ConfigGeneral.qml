@@ -1,19 +1,16 @@
 /*
-    SPDX-FileCopyrightText: 2023 Dmitry Ilyich Sidorov <jonmagon@gmail.com>
+    SPDX-FileCopyrightText: 2023, 2024 Dmitry Ilyich Sidorov <jonmagon@gmail.com>
 
     SPDX-License-Identifier: LGPL-3.0-or-later
 */
 
-import QtQuick 2.0
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.12
-import org.kde.kirigami 2.4 as Kirigami
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
+import org.kde.kcmutils as KCM
 
-Item {
-    id: page
-    width: childrenRect.width
-    height: childrenRect.height
-
+KCM.SimpleKCM {
     signal configurationChanged
 
     function saveConfig() {
@@ -32,4 +29,3 @@ Item {
         }
     }
 }
-
